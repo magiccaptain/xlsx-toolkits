@@ -8,7 +8,7 @@ declare module "@magicjs/xlsx-toolkits" {
     _fill?: String;
   }
 
-  interface WriteFileParams {
+  interface WriteXlsxParams {
     columns: [ColumnItem];
     distFile: String;
     rows: [object];
@@ -16,11 +16,11 @@ declare module "@magicjs/xlsx-toolkits" {
     sheetName?: String;
   }
 
-  interface ReadFileParams {
+  interface ReadXlsxParams {
     columns: [ColumnItem];
     fileData: Buffer;
   }
 
-  export function writeFile(params: WriteFileParams): void;
-  export function readFile(params: ReadFileParams): void;
+  export function writeXlsx(params: WriteXlsxParams): void;
+  export function readXlsx(params: ReadXlsxParams): void;
 }
