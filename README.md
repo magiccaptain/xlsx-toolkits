@@ -1,19 +1,19 @@
-# @36node/template-module
+# @magicjs/xlsx-toolkits
 
 [![version][0]][1] [![downloads][2]][3]
 
 ## Install
 
 ```bash
-yarn add module
+yarn add @magicjs/xlsx-toolkits
 ```
 
 ## Usage
 
 ```js
-import module from "module";
+import { readXlsx, writeXlsx } from "@magicjs/xlsx-toolkits";
 
-module();
+// module();
 //=> foo
 ```
 
