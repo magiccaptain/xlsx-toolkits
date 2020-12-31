@@ -144,7 +144,7 @@ export function readXlsx({ columns = [], fileData }) {
   /** content to array of object */
   const aoa = content.map(rawRow =>
     flattenCs
-      .filter(f => f._index)
+      .filter(f => f._index && f.key)
       .reduce((acc, column) => {
         let val = rawRow[column._index];
 
