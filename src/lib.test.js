@@ -32,7 +32,7 @@ const columns = [
   },
 ];
 
-xtest("should write xlsx file", () => {
+test("should write xlsx file", () => {
   const rows = [
     {
       firstName: "Magic",
@@ -48,6 +48,9 @@ xtest("should write xlsx file", () => {
     },
     {
       age: 88,
+    },
+    {
+      age: 0,
     },
     {},
   ];

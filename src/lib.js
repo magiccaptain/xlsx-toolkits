@@ -97,7 +97,7 @@ function rows2Data(flattenCs, rows = []) {
   const fills = flattenCs.map(c => (isNil(c._fill) ? "" : c._fill));
   const data = rows
     .map(r => pickF(r, dataIndexes))
-    .map(r => dataIndexes.map((k, i) => r[k] || fills[i]));
+    .map(r => dataIndexes.map((k, i) => (isNil(r[k]) ? fills[i] : r[k])));
 
   return data;
 }
