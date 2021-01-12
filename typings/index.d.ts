@@ -21,6 +21,16 @@ declare module "@magicjs/xlsx-toolkits" {
     fileData: Buffer;
   }
 
+  interface AppendXlsxParams {
+    columns: [ColumnItem];
+    srcFileData: Buffer;
+    rows: [object];
+    type?: "xlsx" | "csv";
+    sheetName?: String;
+    distFile: String;
+  }
+
   export function writeXlsx(params: WriteXlsxParams): void;
   export function readXlsx(params: ReadXlsxParams): void;
+  export function appendXlsx(params: AppendXlsxParams): void;
 }

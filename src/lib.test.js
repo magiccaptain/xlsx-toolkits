@@ -1,5 +1,6 @@
 import fs from "fs";
-import { genHeaderCells, readXlsx, writeXlsx } from "./lib";
+import { range } from "lodash";
+import { genHeaderCells, readXlsx, writeXlsx, appendXlsx } from "./lib";
 
 const columns = [
   {
@@ -31,7 +32,7 @@ const columns = [
   },
 ];
 
-test("should write xlsx file", () => {
+xtest("should write xlsx file", () => {
   const rows = [
     {
       firstName: "Magic",
@@ -56,6 +57,25 @@ test("should write xlsx file", () => {
     rows,
   });
 });
+
+xtest("should append xlsx file", () => {
+  const fileData = fs.readFileSync("./tmp.xlsx");
+
+  const rows = range(100).map(i => ({
+    firstName: "Magic",
+    lastName: "Captain",
+    age: i,
+    sex: "male",
+  }));
+
+  appendXlsx({
+    srcFileData: fileData,
+    columns,
+    rows,
+    sheetName: "Sheet1",
+    distFile: "./tmp.xlsx",
+  });
+}, 300000);
 
 test("should read xlsx", () => {
   const fileData = fs.readFileSync("./tmp.xlsx");

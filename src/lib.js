@@ -89,6 +89,18 @@ export const genHeaderCells = (columns = []) => {
   };
 };
 
+function rows2Data(flattenCs, rows = []) {
+  const dataIndexes = flattenCs
+    .map(c => c.dataIndex || c.key)
+    .filter(val => Boolean(val));
+  const fills = flattenCs.map(c => c._fill || "");
+  const data = rows
+    .map(r => pickF(r, dataIndexes))
+    .map(r => dataIndexes.map((k, i) => r[k] || fills[i]));
+
+  return data;
+}
+
 export function writeXlsx({
   columns = [],
   distFile = "tmp.xlsx",
@@ -99,21 +111,43 @@ export function writeXlsx({
   const { headerCells: ws, flattenCs, maxDeep } = genHeaderCells(columns);
 
   const wb = XLSX.utils.book_new();
-  const dataIndexes = flattenCs
-    .map(c => c.dataIndex || c.key)
-    .filter(val => Boolean(val));
 
-  const fills = flattenCs.map(c => c._fill || "");
-
-  const data = rows
-    .map(r => pickF(r, dataIndexes))
-    .map(r => dataIndexes.map((k, i) => r[k] || fills[i]));
+  const data = rows2Data(flattenCs, rows);
 
   XLSX.utils.sheet_add_aoa(ws, data, {
     origin: { r: maxDeep + 1, c: 0 },
   });
 
   XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+  XLSX.writeFile(wb, distFile, { bookType: type });
+}
+
+export function appendXlsx({
+  columns = [],
+  srcFileData,
+  rows = [],
+  sheetName = "Sheet1",
+  distFile,
+  type = "xlsx",
+}) {
+  const { flattenCs, headerCells: ws } = genHeaderCells(columns);
+  const data = rows2Data(flattenCs, rows);
+
+  const wb = XLSX.read(srcFileData, { type: "buffer", cellDates: true });
+
+  const isNewSheet = !wb.SheetNames.includes(sheetName);
+  const sheet = isNewSheet ? ws : wb.Sheets[sheetName];
+
+  const curRange = XLSX.utils.decode_range(sheet["!ref"]);
+
+  XLSX.utils.sheet_add_aoa(sheet, data, {
+    origin: { r: curRange.e.r + 1, c: 0 },
+  });
+
+  if (isNewSheet) {
+    XLSX.utils.book_append_sheet(wb, sheet, sheetName);
+  }
 
   XLSX.writeFile(wb, distFile, { bookType: type });
 }
