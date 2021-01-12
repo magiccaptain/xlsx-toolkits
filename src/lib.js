@@ -2,6 +2,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import max from "lodash/max";
 import trim from "lodash/trim";
+import isNil from "lodash/isNil";
 import XLSX from "xlsx";
 
 /**
@@ -93,7 +94,7 @@ function rows2Data(flattenCs, rows = []) {
   const dataIndexes = flattenCs
     .map(c => c.dataIndex || c.key)
     .filter(val => Boolean(val));
-  const fills = flattenCs.map(c => c._fill || "");
+  const fills = flattenCs.map(c => (isNil(c._fill) ? "" : c._fill));
   const data = rows
     .map(r => pickF(r, dataIndexes))
     .map(r => dataIndexes.map((k, i) => r[k] || fills[i]));
